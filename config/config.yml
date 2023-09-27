@@ -1,5 +1,5 @@
 app:
-  name: "frequently_encountered_words"
+  name: "post_words_occurrences_checker"
   version: "1.0.0"
 
 http:

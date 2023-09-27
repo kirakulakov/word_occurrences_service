@@ -13,7 +13,7 @@ import (
 
 // NewRouter -.
 // Swagger spec:
-// @title       Post checker
+// @title       Post words occurrences checker
 // @description Service for find most freq words
 // @version     1.0
 // @host        127.0.0.1:8080
