@@ -90,7 +90,7 @@ func (s *sub) serve(ctx context.Context, checkFrequency int, l *logger.Logger) {
 		select {
 		case <-clock.C:
 
-			for i := 0; i < 10; i++ { // Можно добавить дополнительный шаг получения id's всех существующих постов, и по ним проитерироваться
+			for i := 0; i < 100; i++ { // Хардкод, но можно добавить дополнительный шаг получения id's всех существующих постов, и по ним проитерироваться
 				go func(i int) {
 					fetched, err := s.fetcher.Fetch(i)
 					fetchDone <- fetchResult{fetched, err}
@@ -115,6 +115,7 @@ func groupWordsByCountOccurrences(words []string) map[string]int {
 	for _, word := range words {
 		_wordsByCountOccurrences[word]++
 	}
+
 	return _wordsByCountOccurrences
 }
 
@@ -138,6 +139,7 @@ func RunFetching(freq int, cfg *config.Config) {
 
 			commentPostId := comments[i].PostID
 			commentBody := comments[i].Body
+
 			wordsFromCommentBody := strings.Split(commentBody, " ")
 
 			repo.UpdateStatisticInDB(

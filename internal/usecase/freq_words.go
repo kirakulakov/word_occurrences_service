@@ -17,9 +17,8 @@ func New(r *repo.FreqWordsRepo) *FrequentlyWordsUseCase {
 	}
 }
 
-// Scan - getting words and scan for most frequently.
-func (uc *FrequentlyWordsUseCase) Scan(ctx context.Context) ([]entity.Comm, error) {
-	words, err := uc.repo.GetWords(ctx)
+func (uc *FrequentlyWordsUseCase) GetByPostId(postId int, ctx context.Context) ([]entity.Comm, error) {
+	words, err := uc.repo.GetWordsStatisticsByPostId(postId, ctx)
 	if err != nil {
 		return nil, fmt.Errorf("FrequentlyWordsUseCase - Scan - s.repo.Scan: %w", err)
 	}

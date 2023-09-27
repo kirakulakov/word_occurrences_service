@@ -1,24 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"npp_doslab/config"
 	"npp_doslab/internal/app"
 	fetcher "npp_doslab/pkg/fetchers"
 )
 
-const _fetch_frequency_seconds = 3
+const _fetchInterval = 10
 
 func main() {
+
 	cfg, err := config.NewConfig()
 	if err != nil {
-		log.Fatal("Config error: %s", err)
+		log.Fatal(fmt.Errorf("Config error: %s", err))
 	}
 
-	// Run fetching
-	go fetcher.RunFetching(_fetch_frequency_seconds, cfg)
+	// Fetching
+	go fetcher.RunFetching(_fetchInterval, cfg)
 
-	// Run server
+	// Server
 	app.Run(cfg)
 
 }

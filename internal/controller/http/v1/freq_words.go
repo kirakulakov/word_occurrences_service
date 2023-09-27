@@ -6,6 +6,7 @@ import (
 	"npp_doslab/internal/entity"
 	"npp_doslab/internal/usecase"
 	"npp_doslab/pkg/logger"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,8 +25,8 @@ func NewWPostRouter(handler *gin.RouterGroup, t usecase.FrequentlyWordsUseCase, 
 	}
 }
 
-type wordResponse struct {
-	History []entity.Comm `json:"word"`
+type commentResponse struct {
+	Words []entity.Comm `json:"words"`
 }
 
 // @Summary     Get statistic
@@ -35,12 +36,14 @@ type wordResponse struct {
 // @Accept      json
 // @Produce     json
 // @Param       postId   path      int  true  "Id of specific post"
-// @Success     200 {object} wordResponse
+// @Success     200 {object} commentResponse
 // @Failure     500 {object} response
 // @Router      /post/{postId}/comments/statistics [get]
 func (r *freqWordsRoutes) posts(c *gin.Context) {
-	words, err := r.t.Scan(c.Request.Context())
 	postId := c.Param("postId")
+	postIdInt, err := strconv.Atoi(postId)
+
+	words, err := r.t.GetByPostId(postIdInt, c.Request.Context())
 	fmt.Println(postId)
 
 	if err != nil {
@@ -50,5 +53,5 @@ func (r *freqWordsRoutes) posts(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, wordResponse{words})
+	c.JSON(http.StatusOK, commentResponse{words})
 }

@@ -6,6 +6,7 @@ import (
 	"npp_doslab/internal/entity"
 	"npp_doslab/pkg/logger"
 	"npp_doslab/pkg/postgres"
+	"regexp"
 )
 
 const (
@@ -21,16 +22,18 @@ func New(pg *postgres.Postgres) *FreqWordsRepo {
 	return &FreqWordsRepo{pg}
 }
 
-func (r *FreqWordsRepo) GetWords(ctx context.Context) ([]entity.Comm, error) {
-	sql, _, err := r.Builder.
+func (r *FreqWordsRepo) GetWordsStatisticsByPostId(postId int, ctx context.Context) ([]entity.Comm, error) {
+	sql, args, err := r.Builder.
 		Select("post_id, word", "count").
 		From("word").
+		Where("post_id = ?", postId).
+		OrderBy("count DESC").
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("FreqWordsRepo - GetWords - r.Builder: %w", err)
 	}
 
-	rows, err := r.Pool.Query(ctx, sql)
+	rows, err := r.Pool.Query(ctx, sql, args...)
 	if err != nil {
 		return nil, fmt.Errorf("FreqWordsRepo - GetWords - r.Pool.Query: %w", err)
 	}
@@ -119,6 +122,7 @@ func (r *FreqWordsRepo) UpdateStatisticInDB(
 	wordsByCountOccurrences map[string]int, postId int, ctx context.Context, l *logger.Logger) {
 
 	for word, count_occurences := range wordsByCountOccurrences {
+		word := keepLettersOnly(word)
 
 		currentCount := r._getCurrentCountOccurrencesOfWordInDB(word, ctx, l)
 
@@ -131,4 +135,10 @@ func (r *FreqWordsRepo) UpdateStatisticInDB(
 
 	}
 
+}
+
+func keepLettersOnly(word string) string {
+	reg := regexp.MustCompile("[^a-zA-Z]+")
+	cleanedWord := reg.ReplaceAllString(word, "")
+	return cleanedWord
 }

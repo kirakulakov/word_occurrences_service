@@ -3,7 +3,7 @@ package entity
 type Comm struct {
 	PostId int    `json:"post_id"`
 	Word   string `json:"word"`
-	Count  int    `json:"int"`
+	Count  int    `json:"count"`
 }
 
 type Comment struct {
