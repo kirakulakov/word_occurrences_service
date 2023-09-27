@@ -1,5 +1,5 @@
 app:
-  name: "frequently_encountered_words"
+  name: "post_comments_words_checker"
   version: "1.0.0"
 
 http:
@@ -10,4 +10,4 @@ logger:
 
 postgres:
   pool_max: 2
-  url: postgresql://postgres:root@localhost:5432/auto_primary
+  url: ...
