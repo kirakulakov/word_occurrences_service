@@ -10,4 +10,4 @@ logger:
 
 postgres:
   pool_max: 2
-  url: postgresql://postgres:root@localhost:5432/auto_primary
+  url: ...
