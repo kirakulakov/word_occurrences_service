@@ -1,0 +1,13 @@
+app:
+  name: "frequently_encountered_words"
+  version: "1.0.0"
+
+http:
+  port: "8080"
+
+logger:
+  log_level: "debug"
+
+postgres:
+  pool_max: 2
+  url: postgresql://postgres:root@localhost:5432/auto_primary
